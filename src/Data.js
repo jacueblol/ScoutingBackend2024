@@ -39,7 +39,8 @@ let teamRankingArr;
 let globalAverageScore;
 // Use an async function to fetch and process your data
 // Working:
-export const fetchDataAndProcess = async () => {
+export const fetchDataAndProcess = async (fileName) => {
+    console.log("fetch fetch fetch fetch");
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
         let bigData = JSON.parse(data)["scouting"];
@@ -48,7 +49,6 @@ export const fetchDataAndProcess = async () => {
     else {
         rawData = JSON.parse(data)["scouting"][eventCode];
     }
-    
     commentData = resortColumnByPoint(
         convertCommentsToTableForm(rawData),
         "Team",
@@ -56,6 +56,9 @@ export const fetchDataAndProcess = async () => {
     );
     numData = convertNumDataToTableForm(rawData);
     numData = assignAllScores(numData);
+
+    // 2d Array, numData[0][i] is the ith data point string
+    // numData[i][j] the jth datapoint in the (i-1th) match
     numData = resortColumnsByArray(numData, 
         [
             "Team",
@@ -84,6 +87,7 @@ export const fetchDataAndProcess = async () => {
             "Temp Failure", 
             "Trap"
         ]);   
+    // same formatting as numData
     commentData = resortColumnsByArray(commentData, 
         [
           "Team",
@@ -95,18 +99,53 @@ export const fetchDataAndProcess = async () => {
           "What They Did Well",
           "Additional Comments"
         ]);
-    maxMin = getMaxMin(numData);
+    switch (fileName) {
+        case "RawData":
+            rawDataMap = convertTableToMap(numData);
+            commentTeamMap = convertTableToMap(commentData);
+            return {
+                rawDataMap: rawDataMap,
+                commentTeamMap: commentTeamMap
+            };
+        case "Search":
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            bigTeamMapSplit = [convertToTeamMap(numData), convertToTeamMap(commentData)];
+            maxMinOfAverages = getMaxMinOfAverages();
+            return {
+                teamAverageMap: teamAverageMap,
+                bigTeamMapSplit: bigTeamMapSplit,
+                maxMinOfAverages: maxMinOfAverages
+            };
+        case "Rankings":
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            rankingTable = getRankingTable();
+            return {
+                teamAverageMap: teamAverageMap,
+                rankingTable: rankingTable
+            }
+        case "CompareTeams":
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            maxMinOfAverages = getMaxMinOfAverages();
+            return {
+                teamAverageMap: teamAverageMap,
+                maxMinOfAverages: maxMinOfAverages
+            };
+
+    }
     commentTeamMap = convertTableToMap(commentData);
     numTeamMap = convertToTeamMap(numData);
     teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
     allData = resortColumnByPoint(convertAllToTableForm(rawData), "Team", 0);
     bigTeamMap = convertToTeamMap(allData);
     bigTeamMapSplit = [convertToTeamMap(numData), convertToTeamMap(commentData)];
-    rawDataMap = convertTableToMap(numData);
-    rankingTable = getRankingTable(true, mean);
-    maxMinOfAverages = getMaxMinOfAverages();
+    rawDataMap = convertTableToMap(numData);   
+    rankingTable = getRankingTable();   
+    maxMinOfAverages = getMaxMinOfAverages();   
     teamScoreMap = getDataPointMap("Score");
-    globalAverageScore = getGlobalAverage("Score");
+    // globalAverageScore = getGlobalAverage("Score");
     teamRankingArr = getTeamRankingArr();
     return {
         rawData: rawData,
@@ -121,7 +160,6 @@ export const fetchDataAndProcess = async () => {
         teamAverageMap: teamAverageMap,
         rawDataMap: rawDataMap,
         rankingTable: rankingTable,
-        maxMin: maxMin,
         maxMinOfAverages: maxMinOfAverages,
         bigTeamMapSplit: bigTeamMapSplit,
         teamRankingArr: teamRankingArr,

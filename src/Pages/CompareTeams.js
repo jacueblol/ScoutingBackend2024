@@ -11,10 +11,8 @@ import Select from 'react-select';
 
 function Compare() {
     const [averageData, setAverageData] = useState([]);
-    const [matchData, setMatchData] = useState([]);
     const [allTeams, setAllTeams] = useState([]);
     const [teamData, setTeamData] = useState([]);
-    const [teamMatchData, setTeamMatchData] = useState([]);
     const [maxMin, setMaxMin] = useState({});
     const [teamColors, setTeamColors] = useState([]);
     const [teamList, setTeamList] = useState([]);
@@ -55,37 +53,29 @@ function Compare() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("CompareTeams").then((data) => {
+                console.log("Compare Teams Opened");
                 setAllTeams(getAllTeams(data));
                 setAverageData(data.teamAverageMap);
-                setMatchData(data.bigTeamMap);
-                setMaxMin(data.maxMin);
+                setMaxMin(data.maxMinOfAverages);
             });
         }, 1000);
     }, []);
 
     useEffect(() => {
         let allTeamData = [];
-        let allTeamMatchData = [];
         teamList.forEach((team) => {
             let thisTeamData;
-            let thisTeamMatchData;
 
             if (averageData.size !== 0 && averageData.size !== undefined) {
                 thisTeamData = averageData.get(team);
                 // setTeamData(averageData.get(team));
             }
-            if (matchData.size !== 0 && matchData.size !== undefined) {
-                thisTeamMatchData = matchData.get(team);
-                // setTeamMatchData(matchData.get(team));
-            }
             allTeamData.push(thisTeamData);
-            allTeamMatchData.push(thisTeamMatchData);
 
         });
 
         setTeamData(allTeamData);
-        setTeamMatchData(allTeamMatchData);
     }, [teamList]);
 
     const handleSearch = (e) => {
@@ -204,7 +194,7 @@ function Compare() {
         );
     };
 
-    if (emptyData(teamData) || emptyData(teamMatchData)) {
+    if (emptyData(teamData)) {
         return (
             <div className="search-compare">
                 <div className="search-bar-compare">{renderSelect()}</div>
@@ -233,6 +223,7 @@ function Compare() {
                     let min = maxMin.get(teamData[j][0][i])[0];
                     let max = maxMin.get(teamData[j][0][i])[1];
                     let val = ((teamData[j][1][i] - min) / (max - min)) * 100;
+                    
                     if (isBar) {
                         
                         categoryObj[teamList[j]] = teamData[j][1][i];

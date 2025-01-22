@@ -60,7 +60,8 @@ function Search() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("Search").then((data) => {
+                console.log("Search Opened")
                 setAverageData(data.teamAverageMap);
                 setMatchData(data.bigTeamMapSplit);
                 setMaxMin(data.maxMinOfAverages);

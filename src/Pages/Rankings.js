@@ -33,7 +33,8 @@ function Rankings() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("Rankings").then((data) => {
+                console.log("Rankings Opened");
                 let newData = whitelistDataPointObjArr([...data.rankingTable], numHeaders);
                 sortByKey(newData, sortCol);
                 setData(newData);
