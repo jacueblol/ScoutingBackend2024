@@ -40,7 +40,6 @@ let globalAverageScore;
 // Use an async function to fetch and process your data
 // Working:
 export const fetchDataAndProcess = async (fileName) => {
-    console.log("fetch fetch fetch fetch");
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
         let bigData = JSON.parse(data)["scouting"];
@@ -101,80 +100,47 @@ export const fetchDataAndProcess = async (fileName) => {
         ]);
     switch (fileName) {
         case "RawData":
-            rawDataMap = convertTableToMap(numData);
-            commentTeamMap = convertTableToMap(commentData);
             return {
-                rawDataMap: rawDataMap,
-                commentTeamMap: commentTeamMap
+                rawDataMap: convertTableToMap(numData),
+                commentDataMap: convertTableToMap(commentData),
             };
         case "Search":
             numTeamMap = convertToTeamMap(numData);
             teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-            bigTeamMapSplit = [convertToTeamMap(numData), convertToTeamMap(commentData)];
-            maxMinOfAverages = getMaxMinOfAverages();
             return {
                 teamAverageMap: teamAverageMap,
-                bigTeamMapSplit: bigTeamMapSplit,
-                maxMinOfAverages: maxMinOfAverages
+                bigTeamMapSplit: [convertToTeamMap(numData), convertToTeamMap(commentData)],
+                maxMinOfAverages: getMaxMinOfAverages()
             };
         case "Rankings":
             numTeamMap = convertToTeamMap(numData);
             teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-            rankingTable = getRankingTable();
             return {
                 teamAverageMap: teamAverageMap,
-                rankingTable: rankingTable
+                rankingTable: getRankingTable()
             }
         case "CompareTeams":
             numTeamMap = convertToTeamMap(numData);
             teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-            maxMinOfAverages = getMaxMinOfAverages();
             return {
                 teamAverageMap: teamAverageMap,
-                maxMinOfAverages: maxMinOfAverages
+                maxMinOfAverages: getMaxMinOfAverages(),
             };
 
     }
-    commentTeamMap = convertTableToMap(commentData);
-    numTeamMap = convertToTeamMap(numData);
-    teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-    allData = resortColumnByPoint(convertAllToTableForm(rawData), "Team", 0);
-    bigTeamMap = convertToTeamMap(allData);
-    bigTeamMapSplit = [convertToTeamMap(numData), convertToTeamMap(commentData)];
-    rawDataMap = convertTableToMap(numData);   
-    rankingTable = getRankingTable();   
-    maxMinOfAverages = getMaxMinOfAverages();   
-    teamScoreMap = getDataPointMap("Score");
-    // globalAverageScore = getGlobalAverage("Score");
-    teamRankingArr = getTeamRankingArr();
-    return {
-        rawData: rawData,
-        commentData: commentData,
-        commentDataMap: convertTableToMap(commentData),
-        numData: numData,
-        numDataMap: convertTableToMap(numData),
-        commentTeamMap: commentTeamMap,
-        numTeamMap: numTeamMap,
-        bigTeamMap: bigTeamMap,
-        allData: allData,
-        teamAverageMap: teamAverageMap,
-        rawDataMap: rawDataMap,
-        rankingTable: rankingTable,
-        maxMinOfAverages: maxMinOfAverages,
-        bigTeamMapSplit: bigTeamMapSplit,
-        teamRankingArr: teamRankingArr,
-    };
 };
 
 const getTeamData = (team) => {
   return bigTeamMap.get(team);
 };
+
 const getTeamNumData = (team) => {
   if (numTeamMap.get(team) == undefined) {
     return [[], []];
   }
   return numTeamMap.get(team);
 };
+
 const getTeamCommentData = (team) => {
   return commentTeamMap.get(team);
 };
@@ -217,7 +183,7 @@ function convertToTableForm(data, datatype) {
       const dataKeys = Object.keys(botData);
       for (let k = 0; k < dataKeys.length; k++) {
         row.push(botData[dataKeys[k]]);
-      }
+      } 
       // gets team number
       let teamNameStart = 0;
       for (let i = 0; i < bots[j].length; i++) {
