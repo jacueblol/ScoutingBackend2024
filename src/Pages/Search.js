@@ -18,12 +18,10 @@ function Search() {
     const [teamColors, setTeamColors] = useState([]);
 
     const radarDataPoints = [
-        'Amp',
-        'Speaker',
         'Endgame',
         'Teleop',
         'Auto',
-        'Passes',
+        'Score',
     ];
 
     const numHeaders = [
@@ -32,16 +30,8 @@ function Search() {
         "Auto",
         "Teleop",
         "Endgame",
-        "Auto Pieces",
-        "Tele Pieces",
-        "Passes",
-        "Speaker",
-        "Amp",
-        "Failed Shots Auto",
-        "Failed Intakes Auto",
-        "Fumbles Speaker",
-        "Fumbles Amp",
-        "Trap",
+        "Deep Cage",
+        "Shallow Cage",
         "Climb Failure",
         "Temp Failure",
         "Critical Failure"

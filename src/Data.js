@@ -42,11 +42,11 @@ let globalAverageScore;
 export const fetchDataAndProcess = async (fileName) => {
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
-        let bigData = JSON.parse(data)["scouting"];
+        let bigData = JSON.parse(data)["test2025"];
         rawData = mergeEventCodes(bigData);
     }
     else {
-        rawData = JSON.parse(data)["scouting"][eventCode];
+        rawData = JSON.parse(data)["test2025"][eventCode];
     }
     commentData = resortColumnByPoint(
         convertCommentsToTableForm(rawData),
@@ -54,6 +54,7 @@ export const fetchDataAndProcess = async (fileName) => {
         0
     );
     numData = convertNumDataToTableForm(rawData);
+    console.log(numData);
     numData = assignAllScores(numData);
 
     // 2d Array, numData[0][i] is the ith data point string
@@ -63,28 +64,35 @@ export const fetchDataAndProcess = async (fileName) => {
             "Team",
             "Score",
             "Match Number",
-            "Speaker",
-            "Amp",
             "Auto",
-            "Leave in Auto",
-            "Amp Auto",
-            "Speaker Auto",
+            "Auto Leave",
+            "L1 Auto",
+            "L2 Auto",
+            "L3 Auto",
+            "L4 Auto",
+            "Net Auto",
+            "Processor Auto",
+            "Coral Fumble Auto",
+            "Processor Fumble Auto",
+            "Net Fumble Auto",
             "Teleop",
-            "Amp Teleop",
-            "Speaker Teleop", 
-            "Amped Speaker",
-            "Fumbles Speaker",
-            "Fumbles Amp",
-            "Co-Op",
-            "Driving",
-            "Human Player",
+            "L1 Teleop",
+            "L2 Teleop",
+            "L3 Teleop",
+            "L4 Teleop",
+            "Net Teleop",
+            "Processor Teleop",
+            "Coral Fumble Teleop",
+            "Processor Fumble Teleop",
+            "Net Fumble Teleop",
             "Endgame",
-            "End Park",
-            "End Onstage",
+            "Deep Cage",
+            "Shallow Cage",
             "Climb Failure",
             "Critical Failure",
             "Temp Failure", 
-            "Trap"
+            "Station Intake",
+            "Ground Intake"
         ]);   
     // same formatting as numData
     commentData = resortColumnsByArray(commentData, 

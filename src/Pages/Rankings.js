@@ -11,21 +11,13 @@ function Rankings() {
 
     const numHeaders = [
         "Team",
-        "Match Number",
         "Score",
         "Auto",
+        "Auto Leave",
         "Teleop",
         "Endgame",
-        "Auto Pieces",
-        "Tele Pieces",
-        "Passes",
-        "Speaker",
-        "Amp",
-        "Failed Shots Auto",
-        "Failed Intakes Auto",
-        "Fumbles Speaker",
-        "Fumbles Amp",
-        "Trap",
+        "Shallow Cage",
+        "Deep Cage",
         "Climb Failure",
         "Temp Failure",
         "Critical Failure"
@@ -117,9 +109,9 @@ function Rankings() {
                     </tbody>
                 </table>
             </div>
-            <div className="tree-chart">
+            {/* <div className="tree-chart">
                 <TreeGraph data={convertTreeMap()} dataKey={"Score"}/>
-            </div>
+            </div> */}
         </div>
     );
 }

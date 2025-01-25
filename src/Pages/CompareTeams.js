@@ -18,12 +18,10 @@ function Compare() {
     const [teamList, setTeamList] = useState([]);
 
     const radarDataPoints = [
+        'Score',    
         'Auto',
         'Teleop',
-        'Amp',
-        'Speaker',
         'Endgame',
-        'Passes',
     ];
 
     const getAllTeams = (data) => {
