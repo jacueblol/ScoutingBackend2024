@@ -1,6 +1,7 @@
 
 import { getAllData } from "./widgets/JsonData.js";
 import { assignAllScores } from "./RankingSystem.js";
+import { predictMatch } from "./MatchPredictor.js";
 import { eventCode } from "./App.js";
 
 let minQual = localStorage.getItem("minQual") === null 
@@ -113,8 +114,10 @@ export const fetchDataAndProcess = async (fileName) => {
                 commentDataMap: convertTableToMap(commentData),
             };
         case "Search":
+            console.log()
             numTeamMap = convertToTeamMap(numData);
             teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            predictMatch(teamAverageMap, [['7', '7', '7'], ['7', '7', '7']]);
             return {
                 teamAverageMap: teamAverageMap,
                 bigTeamMapSplit: [convertToTeamMap(numData), convertToTeamMap(commentData)],
