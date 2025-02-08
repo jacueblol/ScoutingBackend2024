@@ -3,6 +3,8 @@ import { getAllData } from "./widgets/JsonData.js";
 import { assignAllScores } from "./RankingSystem.js";
 import { predictMatch } from "./MatchPredictor.js";
 import { eventCode } from "./App.js";
+import { radarDataPoints } from "./Pages/Search.js";
+
 
 let minQual = localStorage.getItem("minQual") === null 
                 ? 0 
@@ -55,7 +57,6 @@ export const fetchDataAndProcess = async (fileName) => {
         0
     );
     numData = convertNumDataToTableForm(rawData);
-    console.log(numData);
     numData = assignAllScores(numData);
 
     // 2d Array, numData[0][i] is the ith data point string
@@ -117,11 +118,12 @@ export const fetchDataAndProcess = async (fileName) => {
             console.log()
             numTeamMap = convertToTeamMap(numData);
             teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-            predictMatch(teamAverageMap, [['7', '7', '7'], ['7', '7', '7']]);
+            // predictMatch(teamAverageMap, [['7', '7', '7'], ['7', '7', '7']]);
             return {
                 teamAverageMap: teamAverageMap,
                 bigTeamMapSplit: [convertToTeamMap(numData), convertToTeamMap(commentData)],
-                maxMinOfAverages: getMaxMinOfAverages()
+                maxMinOfAverages: getMaxMinOfAverages(),
+                globalAverageMap: getGlobalAverageMap(radarDataPoints)
             };
         case "Rankings":
             numTeamMap = convertToTeamMap(numData);
@@ -249,6 +251,7 @@ function convertAllToTableForm(data) {
   return table;
 }
 function getMaxMin(data) {
+    console.log(data);
     let sol = new Map();
     if (data.length == 0) {
         return sol;
@@ -268,6 +271,16 @@ function getMaxMin(data) {
     }
     return sol;
 }
+
+
+function getGlobalAverageMap(dataPoints) {
+    let map = new Map();
+    for (let i = 0; i < dataPoints.length; i++) {
+        map.set(dataPoints[i], getGlobalAverage(dataPoints[i]));
+    }
+    return map;
+}
+
 function getMaxMinOfAverages() {
     let arr = [];
     let keys = Array.from(teamAverageMap.keys());

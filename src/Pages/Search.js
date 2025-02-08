@@ -5,6 +5,12 @@ import './Search.css';
 import './Tables.css';
 import Select from 'react-select';
 
+export const radarDataPoints = [
+    'Endgame',
+    'Teleop',
+    'Auto',
+    'Score',
+];
 function Search() {
     const [averageData, setAverageData] = useState([]);
     const [matchData, setMatchData] = useState([]);
@@ -17,12 +23,7 @@ function Search() {
     const [allTeams, setAllTeams] = useState([]);
     const [teamColors, setTeamColors] = useState([]);
 
-    const radarDataPoints = [
-        'Endgame',
-        'Teleop',
-        'Auto',
-        'Score',
-    ];
+
 
     const numHeaders = [
         "Match Number",
@@ -233,6 +234,7 @@ function Search() {
     // the radar chart
     const convertRadar = () => {
         let arr = [];
+        console.log(teamData);
         for (let i = 1; i < teamData[0].length; i++) {
             if (isRadarPoint(teamData[0][i])) {
                 let min = maxMin.get(teamData[0][i])[0];
@@ -241,6 +243,7 @@ function Search() {
                 arr.push({ key: teamData[0][i], value: val});
             }
         }
+        console.log(arr);
         return arr;
     };
 

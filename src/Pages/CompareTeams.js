@@ -221,17 +221,18 @@ function Compare() {
                     let min = maxMin.get(teamData[j][0][i])[0];
                     let max = maxMin.get(teamData[j][0][i])[1];
                     let val = ((teamData[j][1][i] - min) / (max - min)) * 100;
-                    
                     if (isBar) {
                         
                         categoryObj[teamList[j]] = teamData[j][1][i];
                     } else {
                         categoryObj[teamList[j]] = val;
+                        console.log(categoryObj);
                     }
                 }
                 arr.push(categoryObj);
             }
         }
+        console.log(arr);
         return arr;
     };    
 
