@@ -15,12 +15,15 @@ function Rankings() {
         "Auto",
         "Auto Leave",
         "Teleop",
+        "Branch Pieces",
+        "L4",
+        "L3",
+        "L2",
+        "L1",
+        "Algae",
+        "Net",
+        "Processor",
         "Endgame",
-        "Shallow Cage",
-        "Deep Cage",
-        "Climb Failure",
-        "Temp Failure",
-        "Critical Failure"
     ];
 
     useEffect(() => {
@@ -28,6 +31,7 @@ function Rankings() {
             fetchDataAndProcess("Rankings").then((data) => {
                 console.log("Rankings Opened");
                 let newData = whitelistDataPointObjArr([...data.rankingTable], numHeaders);
+                
                 sortByKey(newData, sortCol);
                 setData(newData);
             });

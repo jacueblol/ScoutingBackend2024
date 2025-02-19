@@ -42,7 +42,7 @@ function Search() {
         "Match Number",
         "Name",
         "Auto Start",
-        "Auto Pieces",
+        "Auto Path",
         "Auto Description",
         "What they did well",
         "What they did bad",    
