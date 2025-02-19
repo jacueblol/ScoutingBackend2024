@@ -11,7 +11,7 @@ const RadarGraph = (props) => {
 
     return (
         <div>
-            <RadarChart outerRadius={90} width={350} height={250} data={props.data}>
+            <RadarChart outerRadius={90} width={400} height={300} data={props.data}>
                 <PolarGrid />
                 <PolarAngleAxis dataKey={props.angleKey} />
                 <PolarRadiusAxis angle={30} domain={props.radiusDomain} />
@@ -24,7 +24,8 @@ const RadarGraph = (props) => {
                             fill={radar.fill}
                             fillOpacity={radar.fillOpacity}
                         />
-                    ))}
+                    ))
+                }
             </RadarChart>
         </div>
     );

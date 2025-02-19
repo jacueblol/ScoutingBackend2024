@@ -56,6 +56,7 @@ function Compare() {
                 setAllTeams(getAllTeams(data));
                 setAverageData(data.teamAverageMap);
                 setMaxMin(data.maxMinOfAverages);
+                
             });
         }, 1000);
     }, []);
@@ -214,7 +215,8 @@ function Compare() {
     // the radar chart
     const convertForReCharts = (isBar) => {
         let arr = [];
-        for (let i = 1; i < teamData[0][0].length; i++) {
+        console.log(teamData);
+        for (let i = 1; i < teamData[0][0].length; i++) {``
             if (isRadarPoint(teamData[0][0][i])) {
                 let categoryObj = { key: teamData[0][0][i] };
                 for (let j = 0; j < teamData.length; j++) {
@@ -222,16 +224,15 @@ function Compare() {
                     let max = maxMin.get(teamData[j][0][i])[1];
                     let val = ((teamData[j][1][i] - min) / (max - min)) * 100;
                     if (isBar) {
-                        
                         categoryObj[teamList[j]] = teamData[j][1][i];
                     } else {
                         categoryObj[teamList[j]] = val;
-                        console.log(categoryObj);
                     }
                 }
                 arr.push(categoryObj);
             }
         }
+
         console.log(arr);
         return arr;
     };    
@@ -285,7 +286,7 @@ function Compare() {
                             dataKey: team,
                             stroke: colorConfig[`team${index + 1}`].fill,
                             fill: colorConfig[`team${index + 1}`].fill,
-                            fillOpacity: 0.6,
+                            fillOpacity: 0.4,
                         }))}
                     />
                 </div>
