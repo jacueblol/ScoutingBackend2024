@@ -20,6 +20,13 @@ const RadarGraphSearch = (props) => {
                     fill={props.radar1.fill}
                     fillOpacity={props.radar1.fillOpacity}
                 />
+                <Radar
+                    name = {"Average"}
+                    stroke = {props.radar1.stroke}
+                    fill="#82ca9d"
+                     fillOpacity={0.6}
+                    dataKey = {'average'}
+                />
             </RadarChart>
         </div>
     );

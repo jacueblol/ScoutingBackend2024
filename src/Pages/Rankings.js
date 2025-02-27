@@ -11,30 +11,31 @@ function Rankings() {
 
     const numHeaders = [
         "Team",
-        "Match Number",
         "Score",
         "Auto",
         "Teleop",
         "Endgame",
         "Auto Pieces",
-        "Tele Pieces",
-        "Passes",
-        "Speaker",
-        "Amp",
-        "Failed Shots Auto",
-        "Failed Intakes Auto",
-        "Fumbles Speaker",
-        "Fumbles Amp",
-        "Trap",
-        "Climb Failure",
-        "Temp Failure",
-        "Critical Failure"
+        "Auto Leave",
+        "Branch Pieces",
+        "Coral Fumbles",
+        "L4",
+        "L3",
+        "L2",
+        "L1",
+        "Algae Fumbles",
+        "Net",
+        "Processor",
+        "Climb Failure"
+        
     ];
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("Rankings").then((data) => {
+                console.log("Rankings Opened");
                 let newData = whitelistDataPointObjArr([...data.rankingTable], numHeaders);
+                
                 sortByKey(newData, sortCol);
                 setData(newData);
             });
@@ -116,9 +117,7 @@ function Rankings() {
                     </tbody>
                 </table>
             </div>
-            <div className="tree-chart">
-                <TreeGraph data={convertTreeMap()} dataKey={"Score"}/>
-            </div>
+
         </div>
     );
 }

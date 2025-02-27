@@ -1,37 +1,64 @@
 
+let teamAverageMap;
 
-const realScores =  
-{
-    "Leave in Auto" : 2,
-    "Amp Auto" : 5,
-    "Speaker Auto" : 5,
-    "Amp Teleop" : 3.4,
-    "Amped Speaker" : 3.4,
-    "Speaker Teleop" : 2, 
-    "End Park" : 2,
-    "End Onstage" : 3,
-    "Trap" : 5
+export function predictMatch(newTeamAverageMap, teams) {
+    teamAverageMap = newTeamAverageMap;
+    let winner = "Draw";
+    console.log(getFullTeamResult(teams[0]));
+    let team1Result = getFullTeamResult(teams[0]);
+    let team2Result = getFullTeamResult(teams[1]);
+    winner = findWinner(team1Result[4][team1Result.length - 1], team2Result[4][team2Result.length - 1]);
+    console.log(winner);
 }
 
-
-export function predictTeamScore(teamArr) {
-    let score = 0;
+function getFullTeamResult(teamArr) {
+    let scoreTotal = 0;
+    let teleopTotal = 0;
+    let autoTotal = 0;
+    let endgameTotal = 0;
+    let map = new Map();
+    // order is team names, autos, teleop, endgame, score
+    let finalArr = [[], [], [], [], []];
     for (let i = 0; i < teamArr.length; i++) {
-        score += getTeamScore(teamArr[i]);
+        console.log(teamAverageMap);
+        console.log(teamAverageMap.get(teamArr[i]))
+        let score = getDataPointValue("Score", teamAverageMap.get(teamArr[i]));
+        let auto = getDataPointValue("Auto", teamAverageMap.get(teamArr[i]));
+        let teleop = getDataPointValue("Teleop", teamAverageMap.get(teamArr[i]));
+        let endgame = getDataPointValue("Endgame", teamAverageMap.get(teamArr[i]));
+        finalArr[0].push(teamArr[i]);
+        finalArr[1].push(auto);
+        finalArr[2].push(teleop);
+        finalArr[3].push(endgame);
+        finalArr[4].push(score);
+        scoreTotal += parseFloat(score);
+        autoTotal += parseFloat(auto);
+        teleopTotal += parseFloat(teleop);
+        endgameTotal += parseFloat(endgame);
+    
     }
-    return score;
-}  
+    finalArr[0].push("Final:");
+    finalArr[1].push(autoTotal);
+    finalArr[2].push(teleopTotal);
+    finalArr[3].push(endgameTotal);
+    finalArr[4].push(scoreTotal);
+    console.log(finalArr);
+    return finalArr;
+}
 
-function getTeamScore(data) {
-    let score = 0;
-    for (let i = 0; i < data[0].length; i++) {
-        if (realScores[data[0][i]] != undefined) {
-            score += realScores[data[0][i]] * data[1][i];
+function getDataPointValue(dataPoint, arr) {
+    for (let i = 0; i < arr[0].length; i++) {
+        if (arr[0][i] == dataPoint) {
+            return arr[1][i];
         }
     }
-    return score;
+    return 0;
 }
 
-
-
-
+function findWinner(team1Score, team2Score) {
+    let score = team1Score - team2Score;
+    if (score == 0) {
+        return "Draw";
+    }
+    return score > 0 ? "Team 1" : "Team 2";
+}

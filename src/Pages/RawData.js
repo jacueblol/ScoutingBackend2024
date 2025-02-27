@@ -10,7 +10,8 @@ function RawData() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("RawData").then((data) => {
+                console.log("Raw Data Opened");
                 setData(data);
                 setHeaders(Object.keys(data[selectedDataMap][0]));
                 sortByKey(data[selectedDataMap], "Match Number");

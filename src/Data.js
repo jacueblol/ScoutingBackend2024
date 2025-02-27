@@ -1,7 +1,10 @@
 
 import { getAllData } from "./widgets/JsonData.js";
 import { assignAllScores } from "./RankingSystem.js";
+import { predictMatch } from "./MatchPredictor.js";
 import { eventCode } from "./App.js";
+import { radarDataPoints } from "./Pages/Search.js";
+
 
 let minQual = localStorage.getItem("minQual") === null 
                 ? 0 
@@ -39,16 +42,15 @@ let teamRankingArr;
 let globalAverageScore;
 // Use an async function to fetch and process your data
 // Working:
-export const fetchDataAndProcess = async () => {
+export const fetchDataAndProcess = async (fileName) => {
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
-        let bigData = JSON.parse(data)["scouting"];
+        let bigData = JSON.parse(data)["test2025"];
         rawData = mergeEventCodes(bigData);
     }
     else {
-        rawData = JSON.parse(data)["scouting"][eventCode];
+        rawData = JSON.parse(data)["test2025"][eventCode];
     }
-    
     commentData = resortColumnByPoint(
         convertCommentsToTableForm(rawData),
         "Team",
@@ -56,34 +58,47 @@ export const fetchDataAndProcess = async () => {
     );
     numData = convertNumDataToTableForm(rawData);
     numData = assignAllScores(numData);
+
+    // 2d Array, numData[0][i] is the ith data point string
+    // numData[i][j] the jth datapoint in the (i-1th) match
     numData = resortColumnsByArray(numData, 
         [
             "Team",
             "Score",
             "Match Number",
-            "Speaker",
-            "Amp",
             "Auto",
-            "Leave in Auto",
-            "Amp Auto",
-            "Speaker Auto",
+            "Auto Leave",
+            "Algae Removed Auto",
+            "L1 Auto",
+            "L2 Auto",
+            "L3 Auto",
+            "L4 Auto",
+            "Net Auto",
+            "Processor Auto",
+            "Coral Fumble Auto",
+            "Processor Fumble Auto",
+            "Net Fumble Auto",
             "Teleop",
-            "Amp Teleop",
-            "Speaker Teleop", 
-            "Amped Speaker",
-            "Fumbles Speaker",
-            "Fumbles Amp",
-            "Co-Op",
-            "Driving",
-            "Human Player",
+            "Algae Removed Teleop",
+            "L1 Teleop",
+            "L2 Teleop",
+            "L3 Teleop",
+            "L4 Teleop",
+            "Net Teleop",
+            "Processor Teleop",
+            "Coral Fumble Teleop",
+            "Processor Fumble Teleop",
+            "Net Fumble Teleop",
             "Endgame",
-            "End Park",
-            "End Onstage",
+            "Deep Cage",
+            "Shallow Cage",
             "Climb Failure",
             "Critical Failure",
             "Temp Failure", 
-            "Trap"
+            "Station Intake",
+            "Ground Intake"
         ]);   
+    // same formatting as numData
     commentData = resortColumnsByArray(commentData, 
         [
           "Team",
@@ -95,48 +110,52 @@ export const fetchDataAndProcess = async () => {
           "What They Did Well",
           "Additional Comments"
         ]);
-    maxMin = getMaxMin(numData);
-    commentTeamMap = convertTableToMap(commentData);
-    numTeamMap = convertToTeamMap(numData);
-    teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
-    allData = resortColumnByPoint(convertAllToTableForm(rawData), "Team", 0);
-    bigTeamMap = convertToTeamMap(allData);
-    bigTeamMapSplit = [convertToTeamMap(numData), convertToTeamMap(commentData)];
-    rawDataMap = convertTableToMap(numData);
-    rankingTable = getRankingTable(true, mean);
-    maxMinOfAverages = getMaxMinOfAverages();
-    teamScoreMap = getDataPointMap("Score");
-    globalAverageScore = getGlobalAverage("Score");
-    teamRankingArr = getTeamRankingArr();
-    return {
-        rawData: rawData,
-        commentData: commentData,
-        commentDataMap: convertTableToMap(commentData),
-        numData: numData,
-        numDataMap: convertTableToMap(numData),
-        commentTeamMap: commentTeamMap,
-        numTeamMap: numTeamMap,
-        bigTeamMap: bigTeamMap,
-        allData: allData,
-        teamAverageMap: teamAverageMap,
-        rawDataMap: rawDataMap,
-        rankingTable: rankingTable,
-        maxMin: maxMin,
-        maxMinOfAverages: maxMinOfAverages,
-        bigTeamMapSplit: bigTeamMapSplit,
-        teamRankingArr: teamRankingArr,
-    };
+    switch (fileName) {
+        case "RawData":
+            return {
+                rawDataMap: convertTableToMap(numData),
+                commentDataMap: convertTableToMap(commentData),
+            };
+        case "Search":
+            console.log()
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            // predictMatch(teamAverageMap, [['7', '7', '7'], ['7', '7', '7']]);
+            return {
+                teamAverageMap: teamAverageMap,
+                bigTeamMapSplit: [convertToTeamMap(numData), convertToTeamMap(commentData)],
+                maxMinOfAverages: getMaxMinOfAverages(),
+                globalAverageMap: getGlobalAverageMap(radarDataPoints)
+            };
+        case "Rankings":
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            return {
+                teamAverageMap: teamAverageMap,
+                rankingTable: getRankingTable()
+            }
+        case "CompareTeams":
+            numTeamMap = convertToTeamMap(numData);
+            teamAverageMap = getTeamAverageMap(includeDead, minQual, maxQual, mean);
+            return {
+                teamAverageMap: teamAverageMap,
+                maxMinOfAverages: getMaxMinOfAverages(),
+            };
+
+    }
 };
 
 const getTeamData = (team) => {
   return bigTeamMap.get(team);
 };
+
 const getTeamNumData = (team) => {
   if (numTeamMap.get(team) == undefined) {
     return [[], []];
   }
   return numTeamMap.get(team);
 };
+
 const getTeamCommentData = (team) => {
   return commentTeamMap.get(team);
 };
@@ -179,7 +198,7 @@ function convertToTableForm(data, datatype) {
       const dataKeys = Object.keys(botData);
       for (let k = 0; k < dataKeys.length; k++) {
         row.push(botData[dataKeys[k]]);
-      }
+      } 
       // gets team number
       let teamNameStart = 0;
       for (let i = 0; i < bots[j].length; i++) {
@@ -234,6 +253,7 @@ function convertAllToTableForm(data) {
   return table;
 }
 function getMaxMin(data) {
+    console.log(data);
     let sol = new Map();
     if (data.length == 0) {
         return sol;
@@ -253,6 +273,16 @@ function getMaxMin(data) {
     }
     return sol;
 }
+
+
+function getGlobalAverageMap(dataPoints) {
+    let map = new Map();
+    for (let i = 0; i < dataPoints.length; i++) {
+        map.set(dataPoints[i], getGlobalAverage(dataPoints[i]));
+    }
+    return map;
+}
+
 function getMaxMinOfAverages() {
     let arr = [];
     let keys = Array.from(teamAverageMap.keys());

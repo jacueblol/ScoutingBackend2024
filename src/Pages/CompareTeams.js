@@ -11,21 +11,20 @@ import Select from 'react-select';
 
 function Compare() {
     const [averageData, setAverageData] = useState([]);
-    const [matchData, setMatchData] = useState([]);
     const [allTeams, setAllTeams] = useState([]);
     const [teamData, setTeamData] = useState([]);
-    const [teamMatchData, setTeamMatchData] = useState([]);
     const [maxMin, setMaxMin] = useState({});
     const [teamColors, setTeamColors] = useState([]);
     const [teamList, setTeamList] = useState([]);
 
     const radarDataPoints = [
-        'Auto',
-        'Teleop',
-        'Amp',
-        'Speaker',
         'Endgame',
-        'Passes',
+        'Teleop',
+        'Branch Pieces',
+        'Net',
+        'Processor',
+        'L1',
+        'Auto',
     ];
 
     const getAllTeams = (data) => {
@@ -55,37 +54,30 @@ function Compare() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("CompareTeams").then((data) => {
+                console.log("Compare Teams Opened");
                 setAllTeams(getAllTeams(data));
                 setAverageData(data.teamAverageMap);
-                setMatchData(data.bigTeamMap);
-                setMaxMin(data.maxMin);
+                setMaxMin(data.maxMinOfAverages);
+                
             });
         }, 1000);
     }, []);
 
     useEffect(() => {
         let allTeamData = [];
-        let allTeamMatchData = [];
         teamList.forEach((team) => {
             let thisTeamData;
-            let thisTeamMatchData;
 
             if (averageData.size !== 0 && averageData.size !== undefined) {
                 thisTeamData = averageData.get(team);
                 // setTeamData(averageData.get(team));
             }
-            if (matchData.size !== 0 && matchData.size !== undefined) {
-                thisTeamMatchData = matchData.get(team);
-                // setTeamMatchData(matchData.get(team));
-            }
             allTeamData.push(thisTeamData);
-            allTeamMatchData.push(thisTeamMatchData);
 
         });
 
         setTeamData(allTeamData);
-        setTeamMatchData(allTeamMatchData);
     }, [teamList]);
 
     const handleSearch = (e) => {
@@ -204,7 +196,7 @@ function Compare() {
         );
     };
 
-    if (emptyData(teamData) || emptyData(teamMatchData)) {
+    if (emptyData(teamData)) {
         return (
             <div className="search-compare">
                 <div className="search-bar-compare">{renderSelect()}</div>
@@ -226,7 +218,8 @@ function Compare() {
     // the radar chart
     const convertForReCharts = (isBar) => {
         let arr = [];
-        for (let i = 1; i < teamData[0][0].length; i++) {
+        console.log(teamData);
+        for (let i = 1; i < teamData[0][0].length; i++) {``
             if (isRadarPoint(teamData[0][0][i])) {
                 let categoryObj = { key: teamData[0][0][i] };
                 for (let j = 0; j < teamData.length; j++) {
@@ -234,7 +227,6 @@ function Compare() {
                     let max = maxMin.get(teamData[j][0][i])[1];
                     let val = ((teamData[j][1][i] - min) / (max - min)) * 100;
                     if (isBar) {
-                        
                         categoryObj[teamList[j]] = teamData[j][1][i];
                     } else {
                         categoryObj[teamList[j]] = val;
@@ -243,6 +235,8 @@ function Compare() {
                 arr.push(categoryObj);
             }
         }
+
+        console.log(arr);
         return arr;
     };    
 
@@ -295,7 +289,7 @@ function Compare() {
                             dataKey: team,
                             stroke: colorConfig[`team${index + 1}`].fill,
                             fill: colorConfig[`team${index + 1}`].fill,
-                            fillOpacity: 0.6,
+                            fillOpacity: 0.4,
                         }))}
                     />
                 </div>

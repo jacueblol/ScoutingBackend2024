@@ -5,6 +5,15 @@ import './Search.css';
 import './Tables.css';
 import Select from 'react-select';
 
+export const radarDataPoints = [
+    'Endgame',
+    'Teleop',
+    'Branch Pieces',
+    'Net',
+    'Processor',
+    'L1',
+    'Auto',
+];
 function Search() {
     const [averageData, setAverageData] = useState([]);
     const [matchData, setMatchData] = useState([]);
@@ -16,42 +25,34 @@ function Search() {
     const [maxMin, setMaxMin] = useState({});
     const [allTeams, setAllTeams] = useState([]);
     const [teamColors, setTeamColors] = useState([]);
-
-    const radarDataPoints = [
-        'Amp',
-        'Speaker',
-        'Endgame',
-        'Teleop',
-        'Auto',
-        'Passes',
-    ];
+    const [globalAverageMap, setGlobalAverageMap] = useState({});
 
     const numHeaders = [
         "Match Number",
         "Score",
         "Auto",
-        "Teleop",
-        "Endgame",
         "Auto Pieces",
-        "Tele Pieces",
-        "Passes",
-        "Speaker",
-        "Amp",
-        "Failed Shots Auto",
-        "Failed Intakes Auto",
-        "Fumbles Speaker",
-        "Fumbles Amp",
-        "Trap",
+        "Auto Leave",
+        "Teleop",
+        "Branch Pieces",
+        "Coral Fumbles",
+        "L4",
+        "L3",
+        "L2",
+        "L1",
+        "Algae Fumbles",
+        "Net",
+        "Processor",
+        "Endgame",
         "Climb Failure",
-        "Temp Failure",
-        "Critical Failure"
+        "Failure"
     ];
 
     const commentHeaders = [
         "Match Number",
         "Name",
         "Auto Start",
-        "Auto Pieces",
+        "Auto Path",
         "Auto Description",
         "What they did well",
         "What they did bad",    
@@ -60,11 +61,13 @@ function Search() {
 
     useEffect(() => {
         setTimeout(() => {
-            fetchDataAndProcess().then((data) => {
+            fetchDataAndProcess("Search").then((data) => {
+                console.log("Search Opened")
                 setAverageData(data.teamAverageMap);
                 setMatchData(data.bigTeamMapSplit);
                 setMaxMin(data.maxMinOfAverages);
                 setAllTeams(getAllTeams(data));
+                setGlobalAverageMap(data.globalAverageMap);
             });
         }, 1000);
     }, []);
@@ -242,16 +245,21 @@ function Search() {
     // the radar chart
     const convertRadar = () => {
         let arr = [];
+        console.log("Team Data: " + teamData);
         for (let i = 1; i < teamData[0].length; i++) {
             if (isRadarPoint(teamData[0][i])) {
                 let min = maxMin.get(teamData[0][i])[0];
                 let max = maxMin.get(teamData[0][i])[1];
                 let val = ((teamData[1][i] - min) / (max - min)) * 100;
-                arr.push({ key: teamData[0][i], value: val});
+                let average = ((globalAverageMap.get(teamData[0][i]) - min) / (max - min) * 100)
+                console.log(average);
+                arr.push({ key: teamData[0][i], value: val, average: average});
             }
         }
+        console.log(arr);
         return arr;
     };
+
 
     // returns the section of the match data to display based on if the current data
     // type is either numbers or comments
@@ -277,6 +285,8 @@ function Search() {
 
     // changes match data type to either num or comment
     const handleSelectChange = (e) => {
+        console.log(e);
+        console.log(e.target.value);
         setMatchDataType(e.target.value);
     };
 
@@ -293,7 +303,6 @@ function Search() {
             <div className="search-bar">
                 <div className="search-input">{renderSelect()}</div>
             </div>
-
             <div className="team-stats">
                 <div className="team-average-header">Averages</div>
                 <div className="average-stats-container">
@@ -331,7 +340,7 @@ function Search() {
                             dataKey: 'value',
                             stroke: '#d4af37',
                             fill: '#d4af37',
-                            fillOpacity: 0.6,
+                            fillOpacity: 0.6
                         }}
                     />
                 </div>
