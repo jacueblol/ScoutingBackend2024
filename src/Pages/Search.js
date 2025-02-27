@@ -8,8 +8,11 @@ import Select from 'react-select';
 export const radarDataPoints = [
     'Endgame',
     'Teleop',
+    'Branch Pieces',
+    'Net',
+    'Processor',
+    'L1',
     'Auto',
-    'Score',
 ];
 function Search() {
     const [averageData, setAverageData] = useState([]);
@@ -28,13 +31,21 @@ function Search() {
         "Match Number",
         "Score",
         "Auto",
+        "Auto Pieces",
+        "Auto Leave",
         "Teleop",
+        "Branch Pieces",
+        "Coral Fumbles",
+        "L4",
+        "L3",
+        "L2",
+        "L1",
+        "Algae Fumbles",
+        "Net",
+        "Processor",
         "Endgame",
-        "Deep Cage",
-        "Shallow Cage",
         "Climb Failure",
-        "Temp Failure",
-        "Critical Failure"
+        "Failure"
     ];
 
     const commentHeaders = [

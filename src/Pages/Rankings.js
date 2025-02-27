@@ -13,17 +13,21 @@ function Rankings() {
         "Team",
         "Score",
         "Auto",
-        "Auto Leave",
         "Teleop",
+        "Endgame",
+        "Auto Pieces",
+        "Auto Leave",
         "Branch Pieces",
+        "Coral Fumbles",
         "L4",
         "L3",
         "L2",
         "L1",
-        "Algae",
+        "Algae Fumbles",
         "Net",
         "Processor",
-        "Endgame",
+        "Climb Failure"
+        
     ];
 
     useEffect(() => {
@@ -113,9 +117,7 @@ function Rankings() {
                     </tbody>
                 </table>
             </div>
-            {/* <div className="tree-chart">
-                <TreeGraph data={convertTreeMap()} dataKey={"Score"}/>
-            </div> */}
+
         </div>
     );
 }

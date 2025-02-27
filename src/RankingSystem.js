@@ -17,6 +17,12 @@ const endGameWeights =
     "Shallow Cage": 6
 }
 
+const failureWeights = 
+{
+    "Temp Failure": .5,
+    "Critical Failure": 1
+}
+
 
 const algaePieceWeights = {
     "Net Teleop": 1,
@@ -37,8 +43,9 @@ const teleopWeights = {
     "L2 Teleop": 4,
     "L3 Teleop": 4,
     "L4 Teleop": 5,
-    "Net Teleop": 4,
-    "Processor Teleop": 2
+    "Net Teleop": 5,
+    "Algae Removed Teleop": 1,
+    "Processor Teleop": 3
 };
 const branchPieceWeights = {
     "L4 Auto": 1,
@@ -76,6 +83,18 @@ const L2Weights = {
 const L1Weights = {
     "L1 Teleop": 1,
     "L1 Auto": 1
+}
+
+const coralFumbleWeights = {
+    "Coral Fumble Teleop": 1,
+    "Coral Fumble Auto": 1
+}
+
+const algaeFumbleWeights = {
+    "Net Fumble Teleop": 1,
+    "Net Fumble Auto": 1,
+    "Processor Fumble Teleop": 1,
+    "Processor Fumble Auto": 1
 }
 
 
@@ -130,6 +149,18 @@ export function assignMatchScoreToEach(data, dataType) {
         case "Processor" :
             weightMap = processorWeights;
             break;
+        case "Failure" :
+            weightMap = failureWeights;
+            break;
+        case "Coral Fumbles" :
+            weightMap = coralFumbleWeights
+            break;
+        case "Algae Fumbles" :
+            weightMap = algaeFumbleWeights;
+            break;
+        case "Auto Pieces" :
+            weightMap = autoPieceWeights;
+            break;
         default:
             weightMap = scoreWeights;
             break;
@@ -165,7 +196,11 @@ export function assignAllScores(data) {
             "Algae", 
             "Net", 
             "Processor", 
-            "Score"
+            "Score",
+            "Failure",
+            "Coral Fumbles",
+            "Algae Fumbles",
+            "Auto Pieces"
         ]);
 
 }
