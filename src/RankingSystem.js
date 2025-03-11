@@ -13,8 +13,8 @@ const autoWeights =
 
 const endGameWeights = 
 {
-    "Deep Cage": 12,
-    "Shallow Cage": 6
+    "Deep Cage": 10,
+    "Shallow Cage": 4
 }
 
 const failureWeights = 
@@ -97,6 +97,12 @@ const algaeFumbleWeights = {
     "Processor Fumble Auto": 1
 }
 
+const pieceCountWeights = {
+    ...branchPieceWeights,
+    ...L1Weights,
+    ...algaePieceWeights
+}
+
 
 
 
@@ -161,6 +167,9 @@ export function assignMatchScoreToEach(data, dataType) {
         case "Auto Pieces" :
             weightMap = autoPieceWeights;
             break;
+        case "Piece Count" : 
+            weightMap = pieceCountWeights;
+            break;
         default:
             weightMap = scoreWeights;
             break;
@@ -200,7 +209,8 @@ export function assignAllScores(data) {
             "Failure",
             "Coral Fumbles",
             "Algae Fumbles",
-            "Auto Pieces"
+            "Auto Pieces",
+            "Piece Count"
         ]);
 
 }
@@ -209,6 +219,7 @@ function assignScore(match, dataPoints, weightMap) {
     let score = 0;
     for (let i = 0; i < match.length; i++) {
         if (weightMap[dataPoints[i]] === undefined) continue;
+        if (weightMap[dataPoints[i]] == '10') score += 2;
         score += parseFloat(match[i]) * weightMap[dataPoints[i]];
     }
     return score.toFixed(2);

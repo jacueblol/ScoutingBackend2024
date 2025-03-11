@@ -12,6 +12,7 @@ function Rankings() {
     const numHeaders = [
         "Team",
         "Score",
+        "Piece Count",
         "Auto",
         "Teleop",
         "Endgame",
