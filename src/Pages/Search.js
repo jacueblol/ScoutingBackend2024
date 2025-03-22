@@ -46,7 +46,8 @@ function Search() {
         "Processor",
         "Endgame",
         "Climb Failure",
-        "Failure"
+        "Failure",
+        "Defense"
     ];
 
     const commentHeaders = [

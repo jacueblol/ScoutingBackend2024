@@ -49,7 +49,8 @@ export const fetchDataAndProcess = async (fileName) => {
         rawData = mergeEventCodes(bigData);
     }
     else {
-        rawData = JSON.parse(data)["2025Scouting"][eventCode];
+        let bigData = JSON.parse(data)["2025Scouting"];
+        rawData = bigData[getEventCode(Object.keys(bigData), eventCode)];
     }
     commentData = resortColumnByPoint(
         convertCommentsToTableForm(rawData),
@@ -237,6 +238,15 @@ function mergeEventCodes(data) {
     }
     return mergedData;
 }
+
+function getEventCode(array, eventCode) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i].toLowerCase() == eventCode.toLowerCase()) {
+            return array[i];
+        }
+    }
+    return "";
+} 
 // Working:
 function convertAllToTableForm(data) {
   let tempComments = convertCommentsToTableForm(data);

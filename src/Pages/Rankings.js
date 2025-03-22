@@ -27,8 +27,8 @@ function Rankings() {
         "Algae Fumbles",
         "Net",
         "Processor",
-        "Climb Failure"
-        
+        "Climb Failure",
+        "Defense"
     ];
 
     useEffect(() => {

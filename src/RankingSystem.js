@@ -6,7 +6,7 @@ const autoWeights =
     "L2 Auto": 4,
     "L3 Auto": 6,
     "L4 Auto": 7,
-    "Processor Auto": 2,
+    "Processor Auto": 3,
     "Net Auto": 4
 }
 
@@ -39,13 +39,13 @@ const autoPieceWeights = {
 }
 
 const teleopWeights = {
-    "L1 Teleop": 2,
-    "L2 Teleop": 4,
+    "L1 Teleop": 2.5,
+    "L2 Teleop": 3,
     "L3 Teleop": 4,
     "L4 Teleop": 5,
     "Net Teleop": 5,
     "Algae Removed Teleop": 1,
-    "Processor Teleop": 3
+    "Processor Teleop": 2
 };
 const branchPieceWeights = {
     "L4 Auto": 1,
