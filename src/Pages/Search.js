@@ -29,6 +29,7 @@ function Search() {
 
     const numHeaders = [
         "Match Number",
+        "Rating",
         "Score",
         "Piece Count",
         "Auto",

@@ -6,14 +6,32 @@ const autoWeights =
     "L2 Auto": 4,
     "L3 Auto": 6,
     "L4 Auto": 7,
-    "Processor Auto": 3,
+    "Processor Auto": 2,
     "Net Auto": 4
+}
+
+const ratingWeights = {
+    "L4 Teleop" : 4,
+    "L3 Teleop" : 3.5,
+    "L2 Teleop" : 3.5,
+    "L1 Teleop" : 3,
+    "Auto Leave" : 3,
+    "Net Teleop" : 4,
+    "Processor Teleop" : 3,
+    "L4 Auto" : 6,
+    "L3 Auto" : 5.5,
+    "L2 Auto" : 4.5,
+    "L1 Auto" : 4,
+    "Net Auto" : 4,
+    "Processor Auto" : 3,
+    "Deep Cage" : 10,
+    "Shallow Cage" : 4
 }
 
 
 const endGameWeights = 
 {
-    "Deep Cage": 10,
+    "Deep Cage": 8,
     "Shallow Cage": 4
 }
 
@@ -39,12 +57,11 @@ const autoPieceWeights = {
 }
 
 const teleopWeights = {
-    "L1 Teleop": 2.5,
+    "L1 Teleop": 2,
     "L2 Teleop": 3,
     "L3 Teleop": 4,
     "L4 Teleop": 5,
-    "Net Teleop": 5,
-    "Algae Removed Teleop": 1,
+    "Net Teleop": 4,
     "Processor Teleop": 2
 };
 const branchPieceWeights = {
@@ -170,6 +187,9 @@ export function assignMatchScoreToEach(data, dataType) {
         case "Piece Count" : 
             weightMap = pieceCountWeights;
             break;
+        case "Rating" :
+            weightMap = ratingWeights;
+            break;
         default:
             weightMap = scoreWeights;
             break;
@@ -210,7 +230,8 @@ export function assignAllScores(data) {
             "Coral Fumbles",
             "Algae Fumbles",
             "Auto Pieces",
-            "Piece Count"
+            "Piece Count", 
+            "Rating"
         ]);
 
 }

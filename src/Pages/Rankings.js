@@ -11,6 +11,7 @@ function Rankings() {
 
     const numHeaders = [
         "Team",
+        "Rating",
         "Score",
         "Piece Count",
         "Auto",
