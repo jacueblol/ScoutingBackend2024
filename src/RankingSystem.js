@@ -24,15 +24,15 @@ const ratingWeights = {
     "L1 Auto" : 4,
     "Net Auto" : 4,
     "Processor Auto" : 3,
-    "Deep Cage" : 10,
+    "Deep Cage" : 8,
     "Shallow Cage" : 4
 }
 
 
 const endGameWeights = 
 {
-    "Deep Cage": 8,
-    "Shallow Cage": 4
+    "Deep Cage": 10,
+    "Shallow Cage": 6
 }
 
 const failureWeights = 
@@ -240,7 +240,7 @@ function assignScore(match, dataPoints, weightMap) {
     let score = 0;
     for (let i = 0; i < match.length; i++) {
         if (weightMap[dataPoints[i]] === undefined) continue;
-        if (weightMap[dataPoints[i]] == '10') score += 2;
+        if (weightMap[dataPoints[i]] == '10' || dataPoints[i] == '8') score += 2;
         score += parseFloat(match[i]) * weightMap[dataPoints[i]];
     }
     return score.toFixed(2);
