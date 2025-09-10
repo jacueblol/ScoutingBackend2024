@@ -45,11 +45,11 @@ let globalAverageScore;
 export const fetchDataAndProcess = async (fileName) => {
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
-        let bigData = JSON.parse(data)["2025Scouting"];
+        let bigData = JSON.parse(data)["test2025"];
         rawData = mergeEventCodes(bigData);
     }
     else {
-        let bigData = JSON.parse(data)["2025Scouting"];
+        let bigData = JSON.parse(data)["test2025"];
         rawData = bigData[getEventCode(Object.keys(bigData), eventCode)];
     }
     commentData = resortColumnByPoint(
