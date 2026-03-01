@@ -63,54 +63,49 @@ export const fetchDataAndProcess = async (fileName) => {
     // 2d Array, numData[0][i] is the ith data point string
     // numData[i][j] the jth datapoint in the (i-1th) match
     numData = resortColumnsByArray(numData, 
-        [
-            "Team",
-            "Score",
-            "Match Number",
-            "Auto",
-            "Auto Leave",
-            "Algae Removed Auto",
-            "L1 Auto",
-            "L2 Auto",
-            "L3 Auto",
-            "L4 Auto",
-            "Net Auto",
-            "Processor Auto",
-            "Coral Fumble Auto",
-            "Processor Fumble Auto",
-            "Net Fumble Auto",
-            "Teleop",
-            "Algae Removed Teleop",
-            "L1 Teleop",
-            "L2 Teleop",
-            "L3 Teleop",
-            "L4 Teleop",
-            "Net Teleop",
-            "Processor Teleop",
-            "Coral Fumble Teleop",
-            "Processor Fumble Teleop",
-            "Net Fumble Teleop",
-            "Endgame",
-            "Deep Cage",
-            "Shallow Cage",
-            "Climb Failure",
-            "Critical Failure",
-            "Temp Failure", 
-            "Station Intake",
-            "Ground Intake"
-        ]);   
+      [
+          "Team",
+          "Score",
+          "Match Number",
+          "Alliance",
+          // Auto section
+          "Climb Auto",
+          "Start Depot",
+          "Start Hub",
+          "Start Outpost",
+          "Outpost Intake",
+          "Depot Intake",
+          "Center Intake Auto",
+          "Score Auto",
+          "Climb Failure Auto",
+          // Teleop section
+          "Score Teleop",
+          "Pass Teleop",
+          "Fumble Percent",
+          // Endgame/Climb section
+          "L1 Climb",
+          "L2 Climb",
+          "Climb Failure",
+          // Other
+          "Ground Intake",
+          "Station Intake",
+          "Temp Failure",
+          "Critical Failure",
+          "Over Bump",
+          "Under Trench",
+          "Shooting While Driving"
+      ]);   
     // same formatting as numData
     commentData = resortColumnsByArray(commentData, 
-        [
-          "Team",
-          "Match Number",
-          "Name",
-          "Auto Pieces",
-          "Auto Description",
-          "What They Did Bad", 
-          "What They Did Well",
-          "Additional Comments"
-        ]);
+      [
+        "Team",
+        "Match Number",
+        "Name",
+        "Auto Path",
+        "Auto Description",
+        "Off Time",
+        "Comments"
+      ]);
     switch (fileName) {
         case "RawData":
             return {
@@ -476,7 +471,7 @@ function getRankingTable() {
   for (let i = 0; i < teams.length; i++) {
     dataArr.push(convertTableToMap(
         mean ? getTeamAverage(teams[i], includeDead, minQual, maxQual)
-               : getTeamAverageMedian(teams[i], includeDead, minQual, maxQual))[0]);
+              : getTeamAverageMedian(teams[i], includeDead, minQual, maxQual))[0]);
   }
   return dataArr;
 }
@@ -549,7 +544,7 @@ function getTeamAverage(team, includeDead, first, last) {
   let jMinusValue = 0;
   for (let j = 0; j < teamData.length; j++) {
     if ((teamData[j][critFailIndex] == 1 && !includeDead)
-         || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
+        || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
     {
         jMinusValue++;
         continue;
@@ -592,7 +587,7 @@ function getTeamAverageMedian(team, includeDead, first, last) {
     let jMinusValue = 0;
     for (let j = 0; j < teamData.length; j++) {
         if ((teamData[j][critFailIndex] == 1 && !includeDead)
-             || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
+            || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
         {
             jMinusValue++;
             continue;
@@ -643,7 +638,7 @@ function getTeamAverageMap(includeDead, first, last, mean) {
   });
   for (let i = 0; i < teams.length; i++) {
     let teamAverage = mean ? getTeamAverage(teams[i], includeDead, first, last)
-                 : getTeamAverageMedian(teams[i], includeDead, first, last);
+                : getTeamAverageMedian(teams[i], includeDead, first, last);
     if (teamAverage.length > 1
             && teamAverage[1].length > 0) {
         averageMap.set(teams[i], teamAverage);

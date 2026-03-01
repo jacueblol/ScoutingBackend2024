@@ -1,138 +1,66 @@
 // Working
-const autoWeights = 
-{
-    "Auto Leave" : 3,
-    "L1 Auto": 3,
-    "L2 Auto": 4,
-    "L3 Auto": 6,
-    "L4 Auto": 7,
-    "Processor Auto": 2,
-    "Net Auto": 4
+const autoWeights = {
+    "Climb Auto": 5,
+    "Start Depot": 2,
+    "Start Hub": 2,
+    "Start Outpost": 2,
+    "Outpost Intake": 3,
+    "Depot Intake": 3,
+    "Center Intake Auto": 3,
+    "Score Auto": 4,
+    "Climb Failure Auto": -5
 }
 
-const ratingWeights = {
-    "L4 Teleop" : 4,
-    "L3 Teleop" : 3.5,
-    "L2 Teleop" : 3.5,
-    "L1 Teleop" : 3,
-    "Auto Leave" : 3,
-    "Net Teleop" : 4,
-    "Processor Teleop" : 3,
-    "L4 Auto" : 6,
-    "L3 Auto" : 5.5,
-    "L2 Auto" : 4.5,
-    "L1 Auto" : 4,
-    "Net Auto" : 4,
-    "Processor Auto" : 3,
-    "Deep Cage" : 8,
-    "Shallow Cage" : 4
-}
-
-
-const endGameWeights = 
-{
-    "Deep Cage": 10,
-    "Shallow Cage": 6
-}
-
-const failureWeights = 
-{
-    "Temp Failure": .5,
-    "Critical Failure": 1
-}
-
-
-const algaePieceWeights = {
-    "Net Teleop": 1,
-    "Processor Teleop": 1
-}
-
-const autoPieceWeights = {
-    "L1 Auto": 1,
-    "L2 Auto": 1,
-    "L3 Auto": 1,
-    "L4 Auto": 1,
-    "Processor Auto": 1,
-    "Net Auto": 1
-}
-
+// Teleop weights
 const teleopWeights = {
-    "L1 Teleop": 2,
-    "L2 Teleop": 3,
-    "L3 Teleop": 4,
-    "L4 Teleop": 5,
-    "Net Teleop": 4,
-    "Processor Teleop": 2
+    "Score Teleop": 3,
+    "Pass Teleop": 2,
+    "Fumble Percent": -0.5  
 };
-const branchPieceWeights = {
-    "L4 Auto": 1,
-    "L3 Auto": 1,
-    "L2 Auto": 1,
-    "L4 Teleop": 1,
-    "L3 Teleop": 1,
-    "L2 Teleop": 1
-}
 
-const netWeights = {
-    "Net Auto": 1,
-    "Net Teleop" : 1
-}
-
-const processorWeights = {
-    "Processor Teleop": 1,
-    "Processor Auto": 1
-}
-
-const L4Weights = {
-    "L4 Teleop": 1,
-    "L4 Auto": 1
-}
-
-const L3Weights = {
-    "L3 Teleop": 1,
-    "L3 Auto": 1
-}
-const L2Weights = {
-    "L2 Teleop": 1,
-    "L2 Auto": 1
-}
-
-const L1Weights = {
-    "L1 Teleop": 1,
-    "L1 Auto": 1
-}
-
-const coralFumbleWeights = {
-    "Coral Fumble Teleop": 1,
-    "Coral Fumble Auto": 1
-}
-
-const algaeFumbleWeights = {
-    "Net Fumble Teleop": 1,
-    "Net Fumble Auto": 1,
-    "Processor Fumble Teleop": 1,
-    "Processor Fumble Auto": 1
-}
-
-const pieceCountWeights = {
-    ...branchPieceWeights,
-    ...L1Weights,
-    ...algaePieceWeights
+const endGameWeights = {
+    "L1 Climb": 3,
+    "L2 Climb": 5,
+    "Climb Failure": -3
 }
 
 
+const failureWeights = {
+    "Temp Failure": -2,
+    "Critical Failure": -10
+}
 
+// Intake weights
+const intakeWeights = {
+    "Ground Intake": 2,
+    "Station Intake": 2
+}
+
+const obstacleWeights = {
+    "Over Bump": 3,
+    "Under Trench": 3,
+    "Shooting While Driving": 4
+}
 
 const scoreWeights = {
     ...autoWeights,
     ...teleopWeights,
     ...endGameWeights,
-  };
+    ...failureWeights,
+    ...intakeWeights,
+    ...obstacleWeights
+};
 
-
-
-
-
+const ratingWeights = {
+    "Score Teleop": 4,
+    "Score Auto": 5,
+    "Pass Teleop": 3,
+    "Climb Auto": 6,
+    "L2 Climb": 7,
+    "L1 Climb": 4,
+    "Ground Intake": 3,
+    "Station Intake": 3
+}
 
 
 export function assignMatchScoreToEach(data, dataType) {
@@ -148,46 +76,16 @@ export function assignMatchScoreToEach(data, dataType) {
         case "Endgame" :
             weightMap = endGameWeights;
             break;
-        case "Branch Pieces" :
-            weightMap = branchPieceWeights;
-            break;
-        case "L4" : 
-            weightMap = L4Weights;
-            break;
-        case "L3" : 
-            weightMap = L3Weights;
-            break;
-        case "L2" : 
-            weightMap = L2Weights;
-            break;
-        case "L1" : 
-            weightMap = L1Weights;
-            break;
-        case "Algae" :
-            weightMap = algaePieceWeights;
-            break;
-        case "Net" :
-            weightMap = netWeights;
-            break;
-        case "Processor" :
-            weightMap = processorWeights;
-            break;
-        case "Failure" :
+        case "Failure":
             weightMap = failureWeights;
             break;
-        case "Coral Fumbles" :
-            weightMap = coralFumbleWeights
+        case "Intake":
+            weightMap = intakeWeights;
             break;
-        case "Algae Fumbles" :
-            weightMap = algaeFumbleWeights;
+        case "Obstacles":
+            weightMap = obstacleWeights;
             break;
-        case "Auto Pieces" :
-            weightMap = autoPieceWeights;
-            break;
-        case "Piece Count" : 
-            weightMap = pieceCountWeights;
-            break;
-        case "Rating" :
+        case "Rating":
             weightMap = ratingWeights;
             break;
         default:
@@ -212,28 +110,16 @@ export function assignScores(data, dataTypeArr) {
 }
 
 export function assignAllScores(data) {
-    return assignScores
-        (data, [
-            "Auto",
-            "Teleop",
-            "Endgame", 
-            "L4", 
-            "L3", 
-            "L2", 
-            "L1", 
-            "Branch Pieces", 
-            "Algae", 
-            "Net", 
-            "Processor", 
-            "Score",
-            "Failure",
-            "Coral Fumbles",
-            "Algae Fumbles",
-            "Auto Pieces",
-            "Piece Count", 
-            "Rating"
-        ]);
-
+    return assignScores(data, [
+        "Auto",
+        "Teleop",
+        "Endgame",
+        "Intake",
+        "Obstacles",
+        "Failure",
+        "Score",
+        "Rating"
+    ]);
 }
 
 function assignScore(match, dataPoints, weightMap) {
