@@ -21,6 +21,7 @@ const teleopWeights = {
 const endGameWeights = {
     "L1 Climb": 3,
     "L2 Climb": 5,
+    "Transversal Climb": 8,
     "Climb Failure": -3
 }
 
@@ -58,6 +59,7 @@ const ratingWeights = {
     "Climb Auto": 6,
     "L2 Climb": 7,
     "L1 Climb": 4,
+    "Transversal Climb": 10,
     "Ground Intake": 3,
     "Station Intake": 3
 }
