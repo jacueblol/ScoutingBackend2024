@@ -1,45 +1,39 @@
 // Working
 const autoWeights = {
     "Climb Auto": 5,
-    "Start Depot": 2,
-    "Start Hub": 2,
-    "Start Outpost": 2,
-    "Outpost Intake": 3,
-    "Depot Intake": 3,
-    "Center Intake Auto": 3,
     "Score Auto": 4,
-    "Climb Failure Auto": -5
+    "Climb Failure Auto": -3
 }
 
 // Teleop weights
 const teleopWeights = {
-    "Score Teleop": 3,
-    "Pass Teleop": 2,
-    "Fumble Percent": -0.5  
+    "Score Teleop": 4,
+    "Pass Teleop": 4,
+    "Fumble Percent": -3.5  
 };
 
 const endGameWeights = {
-    "L1 Climb": 3,
-    "L2 Climb": 5,
-    "Transversal Climb": 8,
-    "Climb Failure": -3
+    "L1 Climb": 4,
+    "L2 Climb": 6,
+    "Transversal Climb": 9,
+    "Climb Failure": -2
 }
 
 
 const failureWeights = {
-    "Temp Failure": -2,
-    "Critical Failure": -10
+    "Temp Failure": 0.5,
+    "Critical Failure": 1
 }
 
 // Intake weights
 const intakeWeights = {
-    "Ground Intake": 2,
-    "Station Intake": 2
+    "Ground Intake": 1,
+    "Station Intake": 1
 }
 
 const obstacleWeights = {
-    "Over Bump": 3,
-    "Under Trench": 3,
+    "Over Bump": 2,
+    "Under Trench": 2,
     "Shooting While Driving": 4
 }
 
@@ -53,15 +47,14 @@ const scoreWeights = {
 };
 
 const ratingWeights = {
-    "Score Teleop": 4,
-    "Score Auto": 5,
-    "Pass Teleop": 3,
-    "Climb Auto": 6,
+    "Score Teleop": 1.9,
+    "Score Auto": 2,
+    "Pass Teleop": 1.6,
+    "Climb Auto": 7,
     "L2 Climb": 7,
-    "L1 Climb": 4,
-    "Transversal Climb": 10,
-    "Ground Intake": 3,
-    "Station Intake": 3
+    "L1 Climb": 6,
+    "Transversal Climb": 9,
+    "Shooting While Driving": 1.5
 }
 
 
