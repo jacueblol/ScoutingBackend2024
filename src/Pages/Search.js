@@ -8,12 +8,11 @@ import Select from 'react-select';
 export const radarDataPoints = [
     'Endgame',
     'Teleop',
-    'Branch Pieces',
-    'Net',
-    'Processor',
-    'L1',
     'Auto',
+    'Score',
+    'Rating'
 ];
+
 function Search() {
     const [averageData, setAverageData] = useState([]);
     const [matchData, setMatchData] = useState([]);
@@ -29,38 +28,52 @@ function Search() {
 
     const numHeaders = [
         "Match Number",
-        "Rating",
         "Score",
-        "Piece Count",
-        "Auto",
-        "Auto Pieces",
-        "Auto Leave",
-        "Teleop",
-        "Coral Fumbles",
-        "Branch Pieces",
-        "L4",
-        "L3",
-        "L2",
-        "L1",
-        "Algae Fumbles",
-        "Net",
-        "Processor",
-        "Endgame",
+        // Auto section
+        "Climb Auto",
+        "Start Depot",
+        "Start Hub",
+        "Start Outpost",
+        "Outpost Intake",
+        "Depot Intake",
+        "Center Intake Auto",
+        "Score Auto",
+        "Climb Failure Auto",
+        "Auto",  // If you have an auto total score
+        // Teleop section
+        "Score Teleop",
+        "Pass Teleop",
+        "Fumble Percent",
+        "Teleop",  // If you have a teleop total score
+        // Endgame/Climb section
+        "L1 Climb",
+        "L2 Climb",
+        "Traversal Climb",
         "Climb Failure",
-        "Failure",
-        "Defense"
+        "Endgame",  // If you have an endgame total score
+        // Other
+        "Ground Intake",
+        "Station Intake",
+        "Temp Failure",
+        "Critical Failure",
+        "Over Bump",
+        "Under Trench",
+        "Shooting While Driving",
+        "Rating",  // If you have a rating score
+        "Failure"  // If you have a failure score
     ];
-
+    
     const commentHeaders = [
         "Match Number",
         "Name",
-        "Auto Start",
+        "Team",
         "Auto Path",
         "Auto Description",
-        "What they did well",
-        "What they did bad",    
-        "Additional Comments"
-    ]
+        "Off Time",
+        "Comments"
+    ];
+
+
 
     useEffect(() => {
         setTimeout(() => {

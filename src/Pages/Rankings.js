@@ -13,42 +13,60 @@ function Rankings() {
         "Team",
         "Rating",
         "Score",
-        "Piece Count",
         "Auto",
-        "Teleop",
-        "Endgame",
-        "Auto Pieces",
-        "Auto Leave",
-        "Branch Pieces",
-        "Coral Fumbles",
-        "L4",
-        "L3",
-        "L2",
-        "L1",
-        "Algae Fumbles",
-        "Net",
-        "Processor",
+        "Teleop", 
+        "Endgame",  
+        // Auto section
+        "Climb Auto",
+        "Score Auto",
+        "Climb Failure Auto",
+  // Total auto score
+        // Teleop section
+        "Score Teleop",
+        "Pass Teleop",
+        "Fumble Percent",
+ // Total teleop score
+        // Endgame/Climb section
+        "L1 Climb",
+        "L2 Climb",
+        "Traversal Climb",
         "Climb Failure",
-        "Defense"
+// Total endgame score
+        // Other stats
+        "Ground Intake",
+        "Station Intake",
+        "Temp Failure",
+        "Critical Failure",
+        "Over Bump",
+        "Under Trench",
+        "Shooting While Driving",
+        "Failure",  // Total failure score
+        "Intake",   // If you have an intake category
+        "Obstacles" // If you have an obstacles category
     ];
 
     useEffect(() => {
         setTimeout(() => {
             fetchDataAndProcess("Rankings").then((data) => {
                 console.log("Rankings Opened");
+                console.log("Raw data:", data.rankingTable);  // ADD THIS
+                console.log("First item:", data.rankingTable[0]);  // AND THIS
+                
                 let newData = whitelistDataPointObjArr([...data.rankingTable], numHeaders);
+                console.log("After whitelist:", newData[0]);  // AND THIS
                 
                 sortByKey(newData, sortCol);
                 setData(newData);
             });
-        }, 1000);}, []);
+        }, 1000);
+    }, []);
 
     useEffect(() => {
         if (data !== undefined && data !== null) {
             let newData = [...data];
 
             sortByKey(newData, sortCol);
-              
+        
             setData(newData);
         }
     }, [sortOrder, sortCol]);
@@ -110,7 +128,7 @@ function Rankings() {
                         {data.map((item, index) => (
                             <tr key={index}>
                                 {headers.map((header, index) => (
-                                  <td key={index}>
+                                    <td key={index}>
                                         {(isNaN(item[header])) ? item[header] : Math.round(item[header] * 100) / 100}
                                     </td>
                                 ))}

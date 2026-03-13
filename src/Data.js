@@ -45,11 +45,11 @@ let globalAverageScore;
 export const fetchDataAndProcess = async (fileName) => {
     const data = await getAllData();
     if (eventCode.toLowerCase() === "all") {
-        let bigData = JSON.parse(data)["test2025"];
+        let bigData = JSON.parse(data)["2026REBUILT"];
         rawData = mergeEventCodes(bigData);
     }
     else {
-        let bigData = JSON.parse(data)["test2025"];
+        let bigData = JSON.parse(data)["2026REBUILT"];
         rawData = bigData[getEventCode(Object.keys(bigData), eventCode)];
     }
     commentData = resortColumnByPoint(
@@ -63,54 +63,49 @@ export const fetchDataAndProcess = async (fileName) => {
     // 2d Array, numData[0][i] is the ith data point string
     // numData[i][j] the jth datapoint in the (i-1th) match
     numData = resortColumnsByArray(numData, 
-        [
-            "Team",
-            "Score",
-            "Match Number",
-            "Auto",
-            "Auto Leave",
-            "Algae Removed Auto",
-            "L1 Auto",
-            "L2 Auto",
-            "L3 Auto",
-            "L4 Auto",
-            "Net Auto",
-            "Processor Auto",
-            "Coral Fumble Auto",
-            "Processor Fumble Auto",
-            "Net Fumble Auto",
-            "Teleop",
-            "Algae Removed Teleop",
-            "L1 Teleop",
-            "L2 Teleop",
-            "L3 Teleop",
-            "L4 Teleop",
-            "Net Teleop",
-            "Processor Teleop",
-            "Coral Fumble Teleop",
-            "Processor Fumble Teleop",
-            "Net Fumble Teleop",
-            "Endgame",
-            "Deep Cage",
-            "Shallow Cage",
-            "Climb Failure",
-            "Critical Failure",
-            "Temp Failure", 
-            "Station Intake",
-            "Ground Intake"
-        ]);   
+      [
+          "Team",
+          "Score",
+          "Match Number",
+          // Auto section
+          "Climb Auto",
+          "Start Depot",
+          "Start Hub",
+          "Start Outpost",
+          "Outpost Intake",
+          "Depot Intake",
+          "Center Intake Auto",
+          "Score Auto",
+          "Climb Failure Auto",
+          // Teleop section
+          "Score Teleop",
+          "Pass Teleop",
+          "Fumble Percent",
+          // Endgame/Climb section
+          "L1 Climb",
+          "L2 Climb",
+          "Traversal Climb",
+          "Climb Failure",
+          // Other
+          "Ground Intake",
+          "Station Intake",
+          "Temp Failure",
+          "Critical Failure",
+          "Over Bump",
+          "Under Trench",
+          "Shooting While Driving"
+      ]);   
     // same formatting as numData
     commentData = resortColumnsByArray(commentData, 
-        [
-          "Team",
-          "Match Number",
-          "Name",
-          "Auto Pieces",
-          "Auto Description",
-          "What They Did Bad", 
-          "What They Did Well",
-          "Additional Comments"
-        ]);
+      [
+        "Team",
+        "Match Number",
+        "Name",
+        "Auto Path",
+        "Auto Description",
+        "Off Time",
+        "Comments"
+      ]);
     switch (fileName) {
         case "RawData":
             return {
@@ -476,7 +471,7 @@ function getRankingTable() {
   for (let i = 0; i < teams.length; i++) {
     dataArr.push(convertTableToMap(
         mean ? getTeamAverage(teams[i], includeDead, minQual, maxQual)
-               : getTeamAverageMedian(teams[i], includeDead, minQual, maxQual))[0]);
+              : getTeamAverageMedian(teams[i], includeDead, minQual, maxQual))[0]);
   }
   return dataArr;
 }
@@ -547,6 +542,7 @@ function getTeamAverage(team, includeDead, first, last) {
   let critFailIndex = getDataPointIndex("Critical Failure", teamData[0]);
   let matchNumberIndex = getDataPointIndex("Match Number", teamData[0]);
   let jMinusValue = 0;
+  
   for (let j = 0; j < teamData.length; j++) {
     if ((teamData[j][critFailIndex] == 1 && !includeDead)
          || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
@@ -556,17 +552,19 @@ function getTeamAverage(team, includeDead, first, last) {
     }
     newTeamData.push([]);
     for (let i = 0; i < teamData[j].length; i++) {
-      if (teamData[0][i] != "Match Number") {
+      if (teamData[0][i] != "Match Number" && teamData[0][i] != "Team") {  // ← Also filter out Team
         newTeamData[j - jMinusValue].push(teamData[j][i]);
       }
     }
   }
+  
   dataArrTest[0].push(...newTeamData[0]);
   if (newTeamData.length <= 1) {
+    dataArrTest[0].unshift("Team");  // ← Add Team header
+    dataArrTest[1].unshift(team);    // ← Add actual team number
     return dataArrTest;
   }
   dataArrTest[1].push(...newTeamData[1]);
-
 
   for (let i = 2; i < newTeamData.length; i++) {
     for (let j = 0; j < newTeamData[0].length; j++) {
@@ -575,12 +573,15 @@ function getTeamAverage(team, includeDead, first, last) {
     }
   }
 
-
-  // not a bug
   for (let i = 0; i < dataArrTest[1].length; i++) {
     dataArrTest[1][i] /= newTeamData.length - 1;
     dataArrTest[1][i] = dataArrTest[1][i].toFixed(1);
   }
+  
+  // ADD TEAM AT THE BEGINNING
+  dataArrTest[0].unshift("Team");
+  dataArrTest[1].unshift(team);  // ← Use 'team' parameter, not teamData
+  
   return dataArrTest;
 }
 function getTeamAverageMedian(team, includeDead, first, last) {
@@ -592,20 +593,22 @@ function getTeamAverageMedian(team, includeDead, first, last) {
     let jMinusValue = 0;
     for (let j = 0; j < teamData.length; j++) {
         if ((teamData[j][critFailIndex] == 1 && !includeDead)
-             || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
+            || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
         {
             jMinusValue++;
             continue;
         }
         newTeamData.push([]);
         for (let i = 0; i < teamData[j].length; i++) {
-          if (teamData[0][i] != "Match Number") {
+          if (teamData[0][i] != "Match Number" && teamData[0][i] != "Team") {
             newTeamData[j - jMinusValue].push(teamData[j][i]);
           }
         }
       }
       dataArrTest[0].push(...newTeamData[0]);
       if (newTeamData.length <= 1) {
+        dataArrTest[0].unshift("Team");
+        dataArrTest[1].unshift(team);
         return dataArrTest;
       }
     for (let i = 0; i < newTeamData[0].length; i++) {
@@ -618,6 +621,9 @@ function getTeamAverageMedian(team, includeDead, first, last) {
     for (let i = 0; i < dataArrTest[1].length; i++) {
         dataArrTest[1][i] = dataArrTest[1][i].toFixed(1);
     }
+
+    dataArrTest[0].unshift("Team");
+    dataArrTest[1].unshift(team);
     return dataArrTest;
       
 }
@@ -643,7 +649,7 @@ function getTeamAverageMap(includeDead, first, last, mean) {
   });
   for (let i = 0; i < teams.length; i++) {
     let teamAverage = mean ? getTeamAverage(teams[i], includeDead, first, last)
-                 : getTeamAverageMedian(teams[i], includeDead, first, last);
+                : getTeamAverageMedian(teams[i], includeDead, first, last);
     if (teamAverage.length > 1
             && teamAverage[1].length > 0) {
         averageMap.set(teams[i], teamAverage);
