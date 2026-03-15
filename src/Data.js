@@ -1,7 +1,7 @@
 
 import { getAllData } from "./widgets/JsonData.js";
 import { assignAllScores } from "./RankingSystem.js";
-import { predictMatch } from "./MatchPredictor.js";
+//import { predictMatch } from "./MatchPredictor.js";
 import { eventCode } from "./App.js";
 import { radarDataPoints } from "./Pages/Search.js";
 
@@ -30,16 +30,16 @@ let numData;
 let commentTeamMap;
 let numTeamMap;
 let bigTeamMap;
-let allData;
+//let allData;
 let teamAverageMap;
-let rankingTable;
-let maxMin;
-let maxMinOfAverages;
-let rawDataMap;
-let bigTeamMapSplit;
+//let rankingTable;
+//let maxMin;
+//let maxMinOfAverages;
+//let rawDataMap;
+//let bigTeamMapSplit;
 let teamScoreMap;   
 let teamRankingArr;
-let globalAverageScore;
+//let globalAverageScore;
 // Use an async function to fetch and process your data
 // Working:
 export const fetchDataAndProcess = async (fileName) => {
@@ -167,7 +167,7 @@ function convertToTableForm(data, datatype) {
 
   // push either commentData or numData datapoints
   // to first index of table (table[0])
-  if (datatype == "comments") {
+  if (datatype === "comments") {
     row[0].push("Match Number");
     table.push(row[0]);
   } else {
@@ -198,12 +198,12 @@ function convertToTableForm(data, datatype) {
       // gets team number
       let teamNameStart = 0;
       for (let i = 0; i < bots[j].length; i++) {
-        if (bots[j][i] == "-") {
+        if (bots[j][i] === "-") {
           teamNameStart = i + 1;
         }
       }
       row.push(bots[j].substring(teamNameStart, bots[j].length));
-      if (datatype == "comments") {
+      if (datatype === "comments") {
         row.push(matchData[bots[j]]["data"]["Match Number"]);
       }
       table.push(row);
@@ -236,7 +236,7 @@ function mergeEventCodes(data) {
 
 function getEventCode(array, eventCode) {
     for (let i = 0; i < array.length; i++) {
-        if (array[i].toLowerCase() == eventCode.toLowerCase()) {
+        if (array[i].toLowerCase() === eventCode.toLowerCase()) {
             return array[i];
         }
     }
@@ -260,7 +260,7 @@ function convertAllToTableForm(data) {
 function getMaxMin(data) {
     console.log(data);
     let sol = new Map();
-    if (data.length == 0) {
+    if (data.length === 0) {
         return sol;
     }
     for (let i = 0 ; i < data[0].length; i++) {
@@ -350,7 +350,7 @@ export function whitelistDataPointObjArr(data, orderArr) {
 // Working but need to make easier to use:
 function resortColumnByPoint(data, point, columnGoal) {
   for (let i = 0; i < data[0].length; i++) {
-    if (data[0][i] == point) {
+    if (data[0][i] === point) {
       return resortColumn(data, i, columnGoal);
     }
   }
@@ -360,7 +360,7 @@ function resortColumnByPoint(data, point, columnGoal) {
 
 function renameHeader(data, headerInitial, headerFinal) {
     for (let i = 0; i < data[0].length; i++) {
-        if (data[0][i] == headerInitial) {
+        if (data[0][i] === headerInitial) {
             data[0][i] = headerFinal;
             break;
         }
@@ -385,7 +385,7 @@ function getLocalAverage(team, dataPoint) {
 
 function getDataPointMap(dataPoint) {
     let keys = Array.from(teamAverageMap.keys());
-    if (keys.length == 0) {
+    if (keys.length === 0) {
         return;
     }
     let scoreTeamMap = {};
@@ -404,7 +404,7 @@ function getDataPointMap(dataPoint) {
 
 function getDataPointIndex(dataPoint, dataPoints) {
     for (let i = 0; i < dataPoints.length; i++) {
-        if (dataPoints[i] == dataPoint) {
+        if (dataPoints[i] === dataPoint) {
             return i;
         }
     }
@@ -424,7 +424,7 @@ function getTeamRankingArr() {
 
 export function getTeamRank(team) {
     for (let i = 0; i < teamRankingArr.length; i++) {
-        if (teamRankingArr[i] == team) {
+        if (teamRankingArr[i] === team) {
             return i + 1;
         }
     }
