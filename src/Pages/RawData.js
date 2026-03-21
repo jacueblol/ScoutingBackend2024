@@ -15,9 +15,9 @@ function RawData() {
                 setData(data);
                 setHeaders(Object.keys(data[selectedDataMap][0]));
                 sortByKey(data[selectedDataMap], "Match Number");
-            });
-        }, 100);
-    }, [selectedDataMap]); // Add selectedDataMap to the dependency array
+            })
+        }, 100)
+    }, [selectedDataMap]) // Add selectedDataMap to the dependency array
 
     function sortByKey(arr, key) {
         return arr.sort((a, b) => {
