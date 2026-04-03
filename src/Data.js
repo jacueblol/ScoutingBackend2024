@@ -27,9 +27,9 @@ let mean = localStorage.getItem("average") === null
 let rawData;
 let commentData;
 let numData;
-let commentTeamMap;
+//let commentTeamMap;
 let numTeamMap;
-let bigTeamMap;
+//let bigTeamMap;
 //let allData;
 let teamAverageMap;
 //let rankingTable;
@@ -37,7 +37,7 @@ let teamAverageMap;
 //let maxMinOfAverages;
 //let rawDataMap;
 //let bigTeamMapSplit;
-let teamScoreMap;   
+//let teamScoreMap;
 let teamRankingArr;
 //let globalAverageScore;
 // Use an async function to fetch and process your data
@@ -68,15 +68,7 @@ export const fetchDataAndProcess = async (fileName) => {
           "Score",
           "Match Number",
           // Auto section
-          "Climb Auto",
-          "Start Depot",
-          "Start Hub",
-          "Start Outpost",
-          "Outpost Intake",
-          "Depot Intake",
-          "Center Intake Auto",
           "Score Auto",
-          "Climb Failure Auto",
           // Teleop section
           "Score Teleop",
           "Pass Teleop",
@@ -138,24 +130,33 @@ export const fetchDataAndProcess = async (fileName) => {
                 teamAverageMap: teamAverageMap,
                 maxMinOfAverages: getMaxMinOfAverages(),
             };
+        default:
+          return {
+              rawDataMap: convertTableToMap(numData),
+              commentDataMap: convertTableToMap(commentData),
+          };
 
     }
 };
 
+/*
 const getTeamData = (team) => {
   return bigTeamMap.get(team);
 };
+*/
 
 const getTeamNumData = (team) => {
-  if (numTeamMap.get(team) == undefined) {
+  if (numTeamMap.get(team) === undefined) {
     return [[], []];
   }
   return numTeamMap.get(team);
 };
 
+/*
 const getTeamCommentData = (team) => {
   return commentTeamMap.get(team);
 };
+*/
 
 // Working
 function convertToTableForm(data, datatype) {
@@ -244,6 +245,7 @@ function getEventCode(array, eventCode) {
     return "";
 } 
 // Working:
+/*
 function convertAllToTableForm(data) {
   let tempComments = convertCommentsToTableForm(data);
   let tempNumData = convertNumDataToTableForm(data);
@@ -258,6 +260,8 @@ function convertAllToTableForm(data) {
   }
   return table;
 }
+*/
+
 function getMaxMin(data) {
     console.log(data);
     let sol = new Map();
@@ -358,7 +362,7 @@ function resortColumnByPoint(data, point, columnGoal) {
   return data;
 }
 
-
+/*
 function renameHeader(data, headerInitial, headerFinal) {
     for (let i = 0; i < data[0].length; i++) {
         if (data[0][i] === headerInitial) {
@@ -367,6 +371,7 @@ function renameHeader(data, headerInitial, headerFinal) {
         }
     }
 }
+*/
 
 function getGlobalAverage(dataPoint) {
     let dataPointMap = getDataPointMap(dataPoint);
@@ -378,11 +383,12 @@ function getGlobalAverage(dataPoint) {
     return total / keys.length;
 }
 
-
+/*
 function getLocalAverage(team, dataPoint) {
     let map = getDataPointMap(dataPoint);
     return map[team];
 }
+*/
 
 function getDataPointMap(dataPoint) {
     let keys = Array.from(teamAverageMap.keys());
@@ -412,7 +418,7 @@ function getDataPointIndex(dataPoint, dataPoints) {
     return 0;
 }
 
-
+/*
 function getTeamRankingArr() {
     let orderedTeamMap = new Map();
     let keys = Object.keys(teamScoreMap);
@@ -422,6 +428,7 @@ function getTeamRankingArr() {
     orderedTeamMap = new Map([...orderedTeamMap.entries()].sort((a, b) => b[1] - a[1]));
     return Array.from(orderedTeamMap.keys());
 }
+*/
 
 export function getTeamRank(team) {
     for (let i = 0; i < teamRankingArr.length; i++) {
@@ -437,7 +444,7 @@ function removeDataPoint(data, dataPoint) {
     for (let j = 0; j < data.length; j++) {
       newTeamData.push([]);
       for (let i = 0; i < data[j].length; i++) {
-        if (data[0][i] != dataPoint) {
+        if (data[0][i] !== dataPoint) {
           newTeamData[j].push(data[j][i]);
         }
       }
@@ -486,7 +493,7 @@ function getIndividualDatapoints(data) {
   let matchKeys = Object.keys(data);
 
   // if there are no matches, return empty table
-  if (matchKeys.length == 0) {
+  if (matchKeys.length === 0) {
     return dataPoints;
   }
 
@@ -515,12 +522,12 @@ function convertToTeamMap(data) {
   let teamMap = new Map();
   // const points = getIndividualDatapoints(rawData);
   let teamNameIndex = 0;
-  if (data.length == 0) {
+  if (data.length === 0) {
     return {};
   }
   const points = data[0];
   for (let i = 0; i < data[0].length; i++) {
-    if (points[i] == "Team") {
+    if (points[i] === "Team") {
       teamNameIndex = i;
       break;
     }
@@ -545,7 +552,7 @@ function getTeamAverage(team, includeDead, first, last) {
   let jMinusValue = 0;
   
   for (let j = 0; j < teamData.length; j++) {
-    if ((teamData[j][critFailIndex] == 1 && !includeDead)
+    if ((teamData[j][critFailIndex] === 1 && !includeDead)
          || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
     {
         jMinusValue++;
@@ -553,7 +560,7 @@ function getTeamAverage(team, includeDead, first, last) {
     }
     newTeamData.push([]);
     for (let i = 0; i < teamData[j].length; i++) {
-      if (teamData[0][i] != "Match Number" && teamData[0][i] != "Team") {  // ← Also filter out Team
+      if (teamData[0][i] !== "Match Number" && teamData[0][i] !== "Team") {  // ← Also filter out Team
         newTeamData[j - jMinusValue].push(teamData[j][i]);
       }
     }
@@ -593,7 +600,7 @@ function getTeamAverageMedian(team, includeDead, first, last) {
     let matchNumberIndex = getDataPointIndex("Match Number", teamData[0]);
     let jMinusValue = 0;
     for (let j = 0; j < teamData.length; j++) {
-        if ((teamData[j][critFailIndex] == 1 && !includeDead)
+        if ((teamData[j][critFailIndex] === 1 && !includeDead)
             || (teamData[j][matchNumberIndex] < minQual) || teamData[j][matchNumberIndex] > maxQual)
         {
             jMinusValue++;
@@ -601,7 +608,7 @@ function getTeamAverageMedian(team, includeDead, first, last) {
         }
         newTeamData.push([]);
         for (let i = 0; i < teamData[j].length; i++) {
-          if (teamData[0][i] != "Match Number" && teamData[0][i] != "Team") {
+          if (teamData[0][i] !== "Match Number" && teamData[0][i] !== "Team") {
             newTeamData[j - jMinusValue].push(teamData[j][i]);
           }
         }
