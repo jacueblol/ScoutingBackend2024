@@ -52,6 +52,7 @@ export const fetchDataAndProcess = async (fileName) => {
         let bigData = JSON.parse(data)["2026REBUILT"];
         rawData = bigData[getEventCode(Object.keys(bigData), eventCode)];
     }
+    console.log("More Com: " + convertCommentsToTableForm(rawData))
     commentData = resortColumnByPoint(
         convertCommentsToTableForm(rawData),
         "Team",
@@ -91,8 +92,8 @@ export const fetchDataAndProcess = async (fileName) => {
     commentData = resortColumnsByArray(commentData, 
       [
         "Team",
-        "Match Number",
         "Name",
+        "Match Number",
         "Auto Path",
         "Auto Description",
         "Off Time",
@@ -318,7 +319,7 @@ function resortColumn(data, columnInitial, columnGoal) {
   }
   return table;
 }
-// Working Perfectly
+
 export function resortColumnsByArray(data, orderArr) { 
   let newData = [...data];
   for (let i = 0; i < orderArr.length; i++) {
@@ -462,7 +463,6 @@ function removeDataPoints(data, dataPointArr) {
 // Working
 function convertTableToMap(data) {
   let mapArr = [];
-
   for (let i = 1; i < data.length; i++) {
     let map = {};
     for (let j = 0; j < data[i].length; j++) {
@@ -592,6 +592,7 @@ function getTeamAverage(team, includeDead, first, last) {
   
   return dataArrTest;
 }
+
 function getTeamAverageMedian(team, includeDead, first, last) {
     let teamData = getTeamNumData(team);
     let critFailIndex = getDataPointIndex("Critical Failure", teamData[0]);
